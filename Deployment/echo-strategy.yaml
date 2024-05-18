@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-deploy-st
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: echo
+      tier: app
+  minReadySeconds: 5 # Pod가 사용 가능한 상태로 간주되기 전에 기다려야 하는 최소 시간(초)을 지정
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3 # 업데이트 진행 중 원래 replicas 수를 초과할 수 있는 최대 Pod 수
+      maxUnavailable: 3 # 업데이트 진행 중 사용 불가능한 최대 Pod 수
+  template:
+    metadata:
+      labels:
+        app: echo
+        tier: app
+    spec:
+      containers:
+      - name: echo
+        image: ghcr.io/subicura/echo:v1
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+
+# 엄밀히 말하면 "Pod을 새로운 버전으로 업데이트한다"는 건 잘못된 표현이고, 
+# "새로운 버전의 Pod을 생성하고 기존 Pod을 제거한다"가 정확한 표현입니다.

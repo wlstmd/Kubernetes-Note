@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-deploy
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: echo
+      tier: app
+  template:
+    metadata:
+      labels:
+        app: echo
+        tier: app
+    spec:
+      containers:
+      - name: echo
+        image: ghcr.io/subicura/echo:v1
+
+# Deployment는 새로운 이미지로 업데이트하기 위해 ReplicaSet을 이용합니다. 
+# 버전을 업데이트하면 새로운 ReplicaSet을 생성하고 해당 ReplicaSet이 새로운 버전의 Pod을 생성합니다.
+# 이외에 StatefulSet, DaemonSet, CronJob, Job등
