@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-np
+spec:
+  type: NodePort
+  ports:
+  - port: 3000
+    protocol: TCP
+    nodePort: 31000
+  selector:
+    app: counter
+    tier: app
+
+# spec.ports.nodePort : 노드에 오픈할 Port (미지정시 30000-32768 중에 자동 할당)
+# minikube service counter-np
+
+# NodePort의 단점은 노드가 사라졌을 때 자동으로 다른 노드를 통해 접근이 불가능하다는 점입니다. 
+# 예를 들어, 3개의 노드가 있다면 3개 중에 아무 노드로 접근해도 NodePort로 연결할 수 있지만,
+# 어떤 노드가 살아 있는지는 알 수가 없습니다.

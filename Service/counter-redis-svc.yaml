@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+spec:
+  selector:
+    matchLabels:
+      app: counter
+      tier: db
+  template:
+    metadata:
+      labels:
+        app: counter
+        tier: db
+    spec:
+      containers:
+      - name: redis
+        image: redis
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+
+---
+apiVersion: v1
+kind: Service # 외부 노출
+metadata:
+  name: redis
+spec:
+  ports:
+  - port: 6379
+    protocol: TCP
+  selector:
+    app: counter
+    tier: db
+
+# CluterIP 서비스의 설정
+# spec.ports.port : 서비스가 생성할 Port
+# spec.ports.containerPort : 컨테이너 내부에서 실행되는 애플리케이션이 listen할 포트
+# spec.selector : 서비스가 접근할 Pod의 label 조건
+
+# Service 유형은 ClusterIP로, 클러스터 내부에서만 접근 가능한 서비스를 생성합니다.

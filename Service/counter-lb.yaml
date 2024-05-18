@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: counter-lb
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 30000
+    targetPort: 3000
+    protocol: TCP
+  selector:
+    app: counter
+    tier: app
+
+# 자동으로 살아 있는 노드에 접근하기 위해 모든 노드를 바라보는 Load Balancer가 필요합니다.
+# spec.ports.targetPort : 서비스가 접근할 Pod의 Port (기본: port랑 동일)
