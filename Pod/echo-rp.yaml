@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: echo-rp
+  labels:
+    app: echo
+spec:
+  containers:
+  - name: app
+    image: ghcr.io/subicura/echo:v1
+    readinessProbe:
+      httpGet:
+        path: /not/exist
+        port: 8080
+      initialDelaySeconds: 5
+      timeoutSeconds: 2 # Default 1
+      periodSeconds: 5 # Defaults 10
+      failureThreshold: 1 # Defaults 3
+
+# readinessProbe
+# 컨테이너가 준비되었는지 체크하고 정상적으로 준비되지 않았다면 Pod으로 들어오는 요청을 제외합니다.
+# livenessProbe와 차이점은 문제가 있어도 Pod을 재시작하지 않고 요청만 제외한다는 점입니다.

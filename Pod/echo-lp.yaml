@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: echo-lp
+  labels:
+    app: echo
+spec:
+  containers:
+  - name: app
+    image: ghcr.io/subicura/echo:v1
+    livenessProbe:
+      httpGet:
+        path: /not/exist
+        port: 8080
+      initialDelaySeconds: 5
+      timeoutSeconds: 2 # Default 1
+      periodSeconds: 5 # Defaults 10
+      failureThreshold: 1 # Defaults 3
+
+# livenessProbe
+# 컨테이너가 정상적으로 동작하는지 체크하고 정상적으로 동작하지 않는다면 컨테이너를 재시작하여 문제를 해결합니다.
+# 정상적으로 응답하지 않았기 때문에 Pod이 여러 번 재시작되고 CrashLoopBackOff 상태로 변경되었습니다.
+
+# 상태체크
+# httpGet 외에 tcpSocket, exec 방법으로 체크할 수 있습니다.
