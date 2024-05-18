@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: echo-rs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo
+      tier: app
+  template:
+    metadata:
+      labels:
+        app: echo
+        tier: app
+    spec:
+      containers:
+      - name: echo
+        image: ghcr.io/subicura/echo:v1
+
+# ReplicaSet은 label을 체크해서 원하는 수의 Pod이 없으면 새로운 Pod을 생성합니다
+# spec.selector : label 체크 조건
+# spec.replicas : 원하는 Pod의 개수
+# spec.template : 생성할 Pod의 명세
+
+# ReplicaSet은 ReplicaSet Controller가 관리하고 Pod의 할당은 여전히 Scheduler가 관리합니다. 
+# 각자 맡은 역할을 충실히 수행하는 모습이 보기 좋습니다
