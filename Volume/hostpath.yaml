@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: host-log
+spec:
+  containers:
+    - name: log
+      image: busybox
+      args: ["bin/sh", "-c", "sleep infinity"]
+      volumeMounts:
+        - name: varlog
+          mountPath: /host/var/log
+  volumes:
+    - name: varlog
+      hostPath:
+        path: /var/log
+# kubectl apply -f hostpath.yaml
+# # 컨테이너 접속 후 /host/var/log 디렉토리를 확인
+# kubectl exec -it host-log -- sh
+# ls -al /host/var/log
